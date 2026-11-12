@@ -19,8 +19,8 @@ export const getApiBaseUrl = () => {
   if (import.meta.env && import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL.replace(/\/+$/, '');
   }
-  if (typeof window !== 'undefined' && window.__API_URL__) {
-    return window.__API_URL__.replace(/\/+$/, '');
+  if (typeof window !== 'undefined' && window.__API_URL__ && window.__API_URL__.trim() !== '') {
+    return window.__API_URL__.trim().replace(/\/+$/, '');
   }
 
   // 2. Browser dynamic URL resolution
