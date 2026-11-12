@@ -39,7 +39,18 @@ export const TravelProvider = ({ children }) => {
     setIsAtmospherePlaying(playing);
   };
 
-  // 4. Wishlist State
+  // 4. Toast Notification State
+  const [toast, setToast] = useState(null);
+
+  const showToast = (message, icon = '⚜️') => {
+    const id = Date.now();
+    setToast({ message, icon, id });
+    setTimeout(() => {
+      setToast(prev => (prev?.id === id ? null : prev));
+    }, 3500);
+  };
+
+  // 5. Wishlist State
   const [wishlist, setWishlist] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('wanderlust_wishlist')) || [];
@@ -50,15 +61,17 @@ export const TravelProvider = ({ children }) => {
 
   const toggleWishlist = (pkgId) => {
     setWishlist(prev => {
-      const next = prev.includes(pkgId) ? prev.filter(id => id !== pkgId) : [...prev, pkgId];
+      const isSaved = prev.includes(pkgId);
+      const next = isSaved ? prev.filter(id => id !== pkgId) : [...prev, pkgId];
       localStorage.setItem('wanderlust_wishlist', JSON.stringify(next));
+      showToast(isSaved ? 'Expedition removed from saved journeys.' : 'Expedition bookmarked to your curated wishlist!', '🤍');
       return next;
     });
   };
 
   const isWishlisted = (pkgId) => wishlist.includes(pkgId);
 
-  // 5. Passport Stamps State
+  // 6. Passport Stamps State
   const [stamps, setStamps] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('wanderlust_stamps')) || ['JTR-GRE-01'];
@@ -69,9 +82,13 @@ export const TravelProvider = ({ children }) => {
 
   const addStamp = (stampCode) => {
     setStamps(prev => {
-      if (prev.includes(stampCode)) return prev;
+      if (prev.includes(stampCode)) {
+        showToast(`Visa stamp [${stampCode}] is already inked in your Passport!`, '🛂');
+        return prev;
+      }
       const next = [...prev, stampCode];
       localStorage.setItem('wanderlust_stamps', JSON.stringify(next));
+      showToast(`Visa Stamp Inked: [${stampCode}] added to your Digital Passport!`, '🛂');
       return next;
     });
   };
@@ -180,6 +197,7 @@ export const TravelProvider = ({ children }) => {
   // 7. Active Modals State
   const [activeItineraryPackage, setActiveItineraryPackage] = useState(null);
   const [activeBookingPackage, setActiveBookingPackage] = useState(null);
+  const [activeDestination, setActiveDestination] = useState(null);
   const [isPassportOpen, setIsPassportOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isBookingLookupOpen, setIsBookingLookupOpen] = useState(false);
@@ -201,10 +219,14 @@ export const TravelProvider = ({ children }) => {
         stamps,
         addStamp,
         hasStamp,
+        toast,
+        showToast,
         activeItineraryPackage,
         setActiveItineraryPackage,
         activeBookingPackage,
         setActiveBookingPackage,
+        activeDestination,
+        setActiveDestination,
         isPassportOpen,
         setIsPassportOpen,
         isWishlistOpen,
