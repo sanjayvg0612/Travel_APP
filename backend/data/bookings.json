@@ -1,0 +1,20 @@
+[
+  {
+    "id": "TRV-2026-8941",
+    "packageId": "pkg-1",
+    "packageTitle": "Santorini Caldera Sunset & Aegean Island Odyssey",
+    "travelerName": "Alexander Wright",
+    "email": "alex.wright@example.com",
+    "phone": "+1 (555) 234-8901",
+    "travelDate": "2026-10-15",
+    "guests": {
+      "adults": 2,
+      "children": 0
+    },
+    "roomType": "deluxe",
+    "selectedAddons": ["vip-transfer", "photo-package"],
+    "totalPriceUSD": 4148,
+    "status": "Confirmed",
+    "createdAt": "2026-09-25T14:30:00Z"
+  }
+]

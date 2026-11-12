@@ -1,0 +1,619 @@
+﻿[
+    {
+        "id":  "pkg-1",
+        "title":  "Santorini Caldera Sunset \u0026 Aegean Island Odyssey",
+        "destinationId":  "dest-1",
+        "destinationName":  "Santorini, Greece",
+        "category":  "Romance \u0026 Luxury",
+        "durationDays":  7,
+        "groupSize":  "Small Group (Max 12)",
+        "priceUSD":  2199,
+        "discountPriceUSD":  1849,
+        "rating":  4.96,
+        "reviewCount":  142,
+        "featured":  true,
+        "badge":  "Bestseller",
+        "image":  "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format\u0026fit=crop\u0026w=1200\u0026q=80",
+        "summary":  "Sail aboard a luxury catamaran around the volcanic caldera, indulge in clifftop wine tastings in Oia, and stay in boutique cave suites.",
+        "inclusions":  [
+                           "6 nights in 5-star boutique cave hotels with caldera views",
+                           "Private catamaran sunset cruise with fresh Mediterranean dinner \u0026 wine",
+                           "Daily gourmet champagne breakfast",
+                           "Exclusive sommelier-guided vineyard tour \u0026 volcanic wine tasting",
+                           "VIP private airport \u0026 ferry luxury transfers",
+                           "Dedicated local English-speaking concierge guide"
+                       ],
+        "exclusions":  [
+                           "International airfare",
+                           "Travel insurance (available as add-on)",
+                           "Discretionary gratuities"
+                       ],
+        "itinerary":  [
+                          {
+                              "day":  1,
+                              "title":  "Arrival in Thira \u0026 Oia Clifftop Sunset Welcome",
+                              "description":  "Private VIP transfer from Thira airport to your luxury cave suite in Oia. Enjoy an evening welcome toast overlooking the caldera as the sun melts into the Aegean."
+                          },
+                          {
+                              "day":  2,
+                              "title":  "Historic Akrotiri \u0026 Volcanic Red Beach Exploration",
+                              "description":  "Guided journey through the Minoan Bronze Age ruins of prehistoric Akrotiri, followed by a seaside luncheon and coastal walk at Red Beach."
+                          },
+                          {
+                              "day":  3,
+                              "title":  "Luxury Catamaran Cruise \u0026 Hot Springs",
+                              "description":  "Set sail across the cobalt caldera waters. Swim in warm mineral thermal springs, snorkel along secluded reefs, and enjoy an on-board sunset BBQ dinner."
+                          },
+                          {
+                              "day":  4,
+                              "title":  "Fira to Oia Scenic Hike \u0026 Traditional Villages",
+                              "description":  "Panoramic walk along the ancient rim path between Fira and Imerovigli. Discover secret cobblestone alleys and blue-domed chapels."
+                          },
+                          {
+                              "day":  5,
+                              "title":  "Santorini Vineyard Tasting \u0026 Gastronomy Masterclass",
+                              "description":  "Visit historic volcanic vineyards producing Assyrtiko wine. Learn classic Cycladic recipes with our master chef overlooking the cliffside."
+                          },
+                          {
+                              "day":  6,
+                              "title":  "Day Trip to Secluded Thirassia Island",
+                              "description":  "Sail across to peaceful sister island Thirassia. Relax in authentic fishing villages unchanged by modern tourism."
+                          },
+                          {
+                              "day":  7,
+                              "title":  "Morning Breakfast \u0026 Fond Farewell",
+                              "description":  "Savor one final terrace breakfast with panoramic views before your private escort to Thira airport for onward travel."
+                          }
+                      ],
+        "airportCode":  "JTR",
+        "flightRoute":  "ATH ➔ JTR",
+        "vibe":  {
+                     "scenery":  10,
+                     "pace":  2,
+                     "social":  3
+                 }
+    },
+    {
+        "id":  "pkg-2",
+        "title":  "Grand Japan: Ancient Kyoto Temples to Tokyo Neon",
+        "destinationId":  "dest-2",
+        "destinationName":  "Kyoto \u0026 Tokyo, Japan",
+        "category":  "Cultural Heritage",
+        "durationDays":  10,
+        "groupSize":  "Small Group (Max 10)",
+        "priceUSD":  3290,
+        "discountPriceUSD":  2890,
+        "rating":  4.98,
+        "reviewCount":  218,
+        "featured":  true,
+        "badge":  "Top Rated",
+        "image":  "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format\u0026fit=crop\u0026w=1200\u0026q=80",
+        "summary":  "Experience the transcendent harmony of ancient samurai traditions, Kyoto tea ceremonies, Mount Fuji views, and Tokyo\u0027s ultra-futuristic metropolis.",
+        "inclusions":  [
+                           "9 nights in luxury hotels \u0026 1 authentic Ryokan with private onsen",
+                           "7-Day Japan Rail Pass (First-Class Shinkansen bullet train)",
+                           "Traditional Kaiseki multi-course dinners \u0026 daily breakfasts",
+                           "Private Kyoto geisha district walking tour with certified tea master",
+                           "Guided Mount Fuji 5th Station \u0026 Lake Kawaguchi panoramic cruise",
+                           "High-speed pocket Wi-Fi device included throughout journey"
+                       ],
+        "exclusions":  [
+                           "International flights to Haneda / Narita",
+                           "Personal shopping \u0026 souvenirs",
+                           "Optional helicopter tour over Tokyo Bay"
+                       ],
+        "itinerary":  [
+                          {
+                              "day":  1,
+                              "title":  "Tokyo Arrival \u0026 Shinjuku Neon Welcome",
+                              "description":  "Check in to luxury accommodations in Shinjuku. Evening welcome dinner with views over the glittering Tokyo skyline."
+                          },
+                          {
+                              "day":  2,
+                              "title":  "Old Edo to Shibuya Crossing",
+                              "description":  "Explore Asakusa Senso-ji temple, stroll the serene Meiji Jingu shrine, and step across world-famous Shibuya crossing."
+                          },
+                          {
+                              "day":  3,
+                              "title":  "Mount Fuji \u0026 Hakone Onsen Retreat",
+                              "description":  "Travel via Romancecar to Hakone. Soak in healing volcanic hot springs and stay in a traditional tatami ryokan."
+                          },
+                          {
+                              "day":  4,
+                              "title":  "Bullet Train to Ancient Kyoto",
+                              "description":  "Board the 300 km/h Shinkansen bullet train to Kyoto. Check in and stroll Gion\u0027s lantern-lit geisha quarter."
+                          },
+                          {
+                              "day":  5,
+                              "title":  "Fushimi Inari Torii Gates \u0026 Arashiyama Bamboo Grove",
+                              "description":  "Early morning walk through 10,000 crimson torii gates. Afternoon tranquility in the towering Arashiyama bamboo forest."
+                          },
+                          {
+                              "day":  6,
+                              "title":  "Golden Pavilion (Kinkaku-ji) \u0026 Zen Meditation",
+                              "description":  "Behold the shimmering gold leaf pavilion reflecting in mirror ponds, followed by private meditation led by a Zen monk."
+                          },
+                          {
+                              "day":  7,
+                              "title":  "Historic Nara Deer Park \u0026 Giant Buddha",
+                              "description":  "Excursion to ancient Nara to bow to friendly wild sika deer and witness the gigantic bronze Buddha at Todai-ji."
+                          },
+                          {
+                              "day":  8,
+                              "title":  "Osaka Gastronomy \u0026 Dotonbori Street Eats",
+                              "description":  "Day exploration of Osaka Castle and culinary crawl tasting authentic takoyaki, okonomiyaki, and wagyu skewers."
+                          },
+                          {
+                              "day":  9,
+                              "title":  "Return to Tokyo \u0026 Ginza Modern Art",
+                              "description":  "Shinkansen back to Tokyo for high-end boutique exploration in Ginza and an interactive digital art experience at teamLab Planets."
+                          },
+                          {
+                              "day":  10,
+                              "title":  "Sayonara Japan Departure",
+                              "description":  "Private limousine transfer to Tokyo International Airport."
+                          }
+                      ],
+        "airportCode":  "HND",
+        "flightRoute":  "NRT ➔ KIX",
+        "vibe":  {
+                     "scenery":  8,
+                     "pace":  5,
+                     "social":  7
+                 }
+    },
+    {
+        "id":  "pkg-3",
+        "title":  "Amalfi Coast \u0026 Capri Private Yacht Experience",
+        "destinationId":  "dest-3",
+        "destinationName":  "Amalfi \u0026 Capri, Italy",
+        "category":  "Romance \u0026 Luxury",
+        "durationDays":  6,
+        "groupSize":  "Small Group (Max 8)",
+        "priceUSD":  2750,
+        "discountPriceUSD":  2390,
+        "rating":  4.93,
+        "reviewCount":  98,
+        "featured":  true,
+        "badge":  "Exclusive",
+        "image":  "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format\u0026fit=crop\u0026w=1200\u0026q=80",
+        "summary":  "Cruise along Italy\u0027s most celebrated coastline, swim beneath the Faraglioni rocks of Capri, and taste artisanal limoncello in cliffside Positano.",
+        "inclusions":  [
+                           "5 nights in 5-star cliffside oceanfront suites in Positano \u0026 Ravello",
+                           "Full-day private Riva yacht charter to Capri \u0026 Blue Grotto",
+                           "Handmade pasta \u0026 Neapolitan pizza masterclass with Italian nonnas",
+                           "Organic lemon orchard tour with artisanal limoncello tasting",
+                           "All private Mercedes transfers across the Amalfi Drive",
+                           "Champagne sunset aperitivo each evening"
+                       ],
+        "exclusions":  [
+                           "International flights to Naples",
+                           "Capri Blue Grotto rowing boat entrance fee (â‚¬18)",
+                           "Personal leisure expenses"
+                       ],
+        "itinerary":  [
+                          {
+                              "day":  1,
+                              "title":  "Naples to Positano Panoramic Arrival",
+                              "description":  "Private Mercedes van transfer along the majestic winding Amalfi cliffside to your terrace suite overlooking Positano."
+                          },
+                          {
+                              "day":  2,
+                              "title":  "Positano Coastal Paths \u0026 Clifftop Dining",
+                              "description":  "Leisurely morning strolling pastel boutiques, followed by an afternoon hike along the Path of the Gods (Sentiero degli Dei)."
+                          },
+                          {
+                              "day":  3,
+                              "title":  "Private Yacht Charter to Isle of Capri",
+                              "description":  "Board a luxury yacht for an unforgettable voyage to Capri. Swim through secret sea caves and behold the iconic Faraglioni arches."
+                          },
+                          {
+                              "day":  4,
+                              "title":  "Ravello Gardens \u0026 Classical Music Villas",
+                              "description":  "Visit romantic Ravello, wander through Villa Rufolo\u0027s infinity gardens suspended between azure sea and alpine sky."
+                          },
+                          {
+                              "day":  5,
+                              "title":  "Amalfi Cathedral \u0026 Historic Lemon Grove Farm",
+                              "description":  "Explore the 9th-century Duomo di Amalfi, followed by an authentic pasta-making class inside an ancient lemon orchard."
+                          },
+                          {
+                              "day":  6,
+                              "title":  "Arrivederci Amalfi Departure",
+                              "description":  "Relaxed breakfast overlooking the bay before private transfer to Naples Capodichino Airport."
+                          }
+                      ],
+        "airportCode":  "NAP",
+        "flightRoute":  "FCO ➔ NAP",
+        "vibe":  {
+                     "scenery":  9,
+                     "pace":  3,
+                     "social":  6
+                 }
+    },
+    {
+        "id":  "pkg-4",
+        "title":  "Bali Bliss: Tropical Sanctuaries, Waterfalls \u0026 Spiritual Retreat",
+        "destinationId":  "dest-4",
+        "destinationName":  "Ubud \u0026 Uluwatu, Bali",
+        "category":  "Wellness \u0026 Eco",
+        "durationDays":  8,
+        "groupSize":  "Small Group (Max 12)",
+        "priceUSD":  1499,
+        "discountPriceUSD":  1199,
+        "rating":  4.91,
+        "reviewCount":  164,
+        "featured":  true,
+        "badge":  "Popular",
+        "image":  "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format\u0026fit=crop\u0026w=1200\u0026q=80",
+        "summary":  "Rejuvenate your soul in the lush jungle valleys of Ubud, bathe in sacred holy springs, and watch cliffside kecak fire dances above Uluwatu\u0027s surf.",
+        "inclusions":  [
+                           "7 nights in luxury private pool villas with rainforest views",
+                           "Daily sunrise yoga sessions \u0026 traditional Balinese Ayurvedic spa massages",
+                           "Purification water ceremony at Tirta Empul holy spring temple",
+                           "Day cruise to Nusa Penida\u0027s Kelingking T-Rex Beach \u0026 Angel\u0027s Billabong",
+                           "All organic farm-to-table meals \u0026 fresh tropical juices",
+                           "Private driver and English-speaking cultural guide"
+                       ],
+        "exclusions":  [
+                           "International flights to Denpasar (DPS)",
+                           "Alcoholic beverages outside welcome dinners",
+                           "Scuba diving gear rental"
+                       ],
+        "itinerary":  [
+                          {
+                              "day":  1,
+                              "title":  "Denpasar to Ubud Jungle Retreat",
+                              "description":  "Transfer to your private pool villa sanctuary surrounded by lush Ayung river ravines. Evening welcome blessing."
+                          },
+                          {
+                              "day":  2,
+                              "title":  "Tegallalang Rice Terraces \u0026 Jungle Swings",
+                              "description":  "Early morning mist hike among UNESCO rice terraces, organic coffee plantation visit, and giant jungle swing."
+                          },
+                          {
+                              "day":  3,
+                              "title":  "Holy Water Temple \u0026 Mount Batur Volcano View",
+                              "description":  "Spiritual melukat cleansing ritual at sacred Tirta Empul temple followed by scenic lunch overlooking Kintamani volcano caldera."
+                          },
+                          {
+                              "day":  4,
+                              "title":  "Secret Waterfalls \u0026 Ubud Artisan Villages",
+                              "description":  "Swim beneath the cascading waters of Tibumana and Tukad Cepung canyon waterfalls, visit silver and wood-carving masters."
+                          },
+                          {
+                              "day":  5,
+                              "title":  "Nusa Penida Island Adventure Cruise",
+                              "description":  "Speedboat to Nusa Penida. Gaze down at iconic Kelingking cliff, swim in crystal clear Broken Beach bay."
+                          },
+                          {
+                              "day":  6,
+                              "title":  "Transfer to Uluwatu Coastal Cliffs",
+                              "description":  "Check in to clifftop ocean resort in Uluwatu. Afternoon beach relaxation at Padang Padang."
+                          },
+                          {
+                              "day":  7,
+                              "title":  "Uluwatu Clifftop Temple \u0026 Kecak Fire Dance",
+                              "description":  "Sunset viewing at the cliff edge temple, followed by hypnotic chanting Kecak performance and fresh seafood dinner at Jimbaran Bay."
+                          },
+                          {
+                              "day":  8,
+                              "title":  "Farewell Bali Departure",
+                              "description":  "Morning sound bath meditation and spa treatment before escort to Denpasar International Airport."
+                          }
+                      ],
+        "airportCode":  "DPS",
+        "flightRoute":  "SIN ➔ DPS",
+        "vibe":  {
+                     "scenery":  9,
+                     "pace":  4,
+                     "social":  4
+                 }
+    },
+    {
+        "id":  "pkg-5",
+        "title":  "Swiss Alpine Grandeur: Glacier Express \u0026 Matterhorn",
+        "destinationId":  "dest-5",
+        "destinationName":  "Zermatt \u0026 Interlaken, Switzerland",
+        "category":  "Adventure \u0026 Nature",
+        "durationDays":  8,
+        "groupSize":  "Small Group (Max 14)",
+        "priceUSD":  3499,
+        "discountPriceUSD":  2999,
+        "rating":  4.97,
+        "reviewCount":  115,
+        "featured":  false,
+        "badge":  "Scenic",
+        "image":  "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format\u0026fit=crop\u0026w=1200\u0026q=80",
+        "summary":  "Traverse the Swiss Alps aboard the world\u0027s most scenic panoramic train, gaze at the legendary Matterhorn, and explore high alpine lakes.",
+        "inclusions":  [
+                           "7 nights in luxury Swiss chalet hotels \u0026 alpine resorts",
+                           "Glacier Express Excellence Class panoramic train tickets with 5-course meal",
+                           "Gornergrat cogwheel railway tickets to Matterhorn summit viewing",
+                           "Cable car ascent to Jungfraujoch - Top of Europe glacier palace",
+                           "Traditional Swiss cheese fondue \u0026 alpine raclette dinner experiences",
+                           "Swiss Travel Pass for unlimited trains, boats, and regional transit"
+                       ],
+        "exclusions":  [
+                           "International flights to Zurich or Geneva",
+                           "Paragliding \u0026 extreme sports fees",
+                           "Personal mountain gear rentals"
+                       ],
+        "itinerary":  [
+                          {
+                              "day":  1,
+                              "title":  "Zurich Arrival \u0026 Lucerne Lakeside Transfer",
+                              "description":  "Meet tour director at Zurich and transfer to romantic Lucerne. Walk across historic Chapel Bridge and dine beside Lake Lucerne."
+                          },
+                          {
+                              "day":  2,
+                              "title":  "Mount Pilatus Golden Roundtrip",
+                              "description":  "Lake steamer boat cruise, world\u0027s steepest cogwheel railway up Mount Pilatus, and panoramic aerial cableway descent."
+                          },
+                          {
+                              "day":  3,
+                              "title":  "Glacier Express to Zermatt",
+                              "description":  "Board the legendary Glacier Express through snow-capped valleys and over dramatic viaducts to car-free Zermatt."
+                          },
+                          {
+                              "day":  4,
+                              "title":  "Gornergrat \u0026 Reflections of the Matterhorn",
+                              "description":  "Ride Europe\u0027s highest open-air cogwheel train to Gornergrat (3,089m). Gaze at the Matterhorn reflecting in Riffelsee lake."
+                          },
+                          {
+                              "day":  5,
+                              "title":  "Scenic Bernese Oberland \u0026 Interlaken",
+                              "description":  "Journey between towering limestone peaks to Interlaken nestled between turquoise Lake Thun and Lake Brienz."
+                          },
+                          {
+                              "day":  6,
+                              "title":  "Jungfraujoch - Top of Europe Glacier",
+                              "description":  "Ascend through the Eiger mountain to Europe\u0027s highest railway station (3,454m). Walk through real ice sculptures in the Ice Palace."
+                          },
+                          {
+                              "day":  7,
+                              "title":  "Lauterbrunnen Valley of 72 Waterfalls",
+                              "description":  "Walk through fairy-tale Lauterbrunnen valley, marveling at Staubbach Falls and TrÃ¼mmelbach glacial waterfalls inside the mountain."
+                          },
+                          {
+                              "day":  8,
+                              "title":  "Return to Zurich \u0026 Departure",
+                              "description":  "Scenic rail journey back to Zurich Airport for international flight departures."
+                          }
+                      ],
+        "airportCode":  "ZRH",
+        "flightRoute":  "GVA ➔ ZRH",
+        "vibe":  {
+                     "scenery":  10,
+                     "pace":  6,
+                     "social":  2
+                 }
+    },
+    {
+        "id":  "pkg-6",
+        "title":  "Serengeti Great Migration \u0026 Zanzibar Spice Sands",
+        "destinationId":  "dest-6",
+        "destinationName":  "Serengeti \u0026 Zanzibar, Tanzania",
+        "category":  "Adventure \u0026 Nature",
+        "durationDays":  9,
+        "groupSize":  "Small Group (Max 8)",
+        "priceUSD":  4199,
+        "discountPriceUSD":  3750,
+        "rating":  4.95,
+        "reviewCount":  89,
+        "featured":  false,
+        "badge":  "Safari",
+        "image":  "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format\u0026fit=crop\u0026w=1200\u0026q=80",
+        "summary":  "Witness the thunderous Great Wildebeest Migration across endless golden savannas, then unwind on turquoise coral shores of Zanzibar.",
+        "inclusions":  [
+                           "5 nights in luxury Serengeti tented safari camps \u0026 3 nights in beachfront Zanzibar resort",
+                           "Private 4x4 open-roof safari Land Cruiser with expert wildlife tracker",
+                           "Serengeti National Park \u0026 Ngorongoro Crater conservation fees",
+                           "Sunrise hot air balloon safari with champagne bush breakfast",
+                           "Domestic bush flight from Serengeti airstrip directly to Zanzibar",
+                           "All gourmet meals, drinks, and bush sundowners"
+                       ],
+        "exclusions":  [
+                           "International flights to Kilimanjaro (JRO)",
+                           "Tanzania tourist visa ($50-$100)",
+                           "Yellow fever vaccination requirements"
+                       ],
+        "itinerary":  [
+                          {
+                              "day":  1,
+                              "title":  "Arusha Arrival \u0026 Safari Briefing",
+                              "description":  "Welcome at Kilimanjaro Airport and overnight stay at a coffee lodge in Arusha with pre-safari orientation."
+                          },
+                          {
+                              "day":  2,
+                              "title":  "Ngorongoro Crater Game Drive",
+                              "description":  "Descend 600m into the prehistoric volcanic caldera, sheltering over 25,000 large mammals including black rhinos and lion prides."
+                          },
+                          {
+                              "day":  3,
+                              "title":  "Entering the Endless Plains of Serengeti",
+                              "description":  "Traverse the legendary Serengeti savanna. Spot leopards lounging in acacia trees and vast herds traversing plains."
+                          },
+                          {
+                              "day":  4,
+                              "title":  "Sunrise Hot Air Balloon \u0026 Full-Day Game Tracking",
+                              "description":  "Float silently above herds at sunrise, touch down for champagne breakfast, followed by an afternoon tracking cheetahs."
+                          },
+                          {
+                              "day":  5,
+                              "title":  "The Great Mara River Crossing Safari",
+                              "description":  "Witness the dramatic migration river crossings where thousands of wildebeest brave river currents and crocodiles."
+                          },
+                          {
+                              "day":  6,
+                              "title":  "Bush Flight to Zanzibar Spice Island",
+                              "description":  "Board a light aircraft flight to Zanzibar. Transfer to your luxury beachfront villa in Nungwi overlooking turquoise waters."
+                          },
+                          {
+                              "day":  7,
+                              "title":  "Stone Town Heritage \u0026 Spice Plantation Tour",
+                              "description":  "Explore the UNESCO labyrinth of Stone Town, historic sultan palaces, and smell fresh vanilla, cloves, and nutmeg."
+                          },
+                          {
+                              "day":  8,
+                              "title":  "Dolphin Catamaran Cruise \u0026 Mnemba Atoll Snorkel",
+                              "description":  "Sail to pristine Mnemba Atoll for vibrant coral snorkeling with green sea turtles and playful wild dolphins."
+                          },
+                          {
+                              "day":  9,
+                              "title":  "Beachfront Farewell \u0026 Zanzibar Departure",
+                              "description":  "Final morning beach walk and coconut beverage before transfer to Abeid Amani Karume International Airport."
+                          }
+                      ],
+        "airportCode":  "JRO",
+        "flightRoute":  "NBO ➔ JRO",
+        "vibe":  {
+                     "scenery":  10,
+                     "pace":  7,
+                     "social":  5
+                 }
+    },
+    {
+        "id":  "pkg-7",
+        "title":  "Iceland Aurora Borealis, Blue Lagoon \u0026 Ice Caves",
+        "destinationId":  "dest-7",
+        "destinationName":  "Reykjavik \u0026 South Coast, Iceland",
+        "category":  "Adventure \u0026 Nature",
+        "durationDays":  6,
+        "groupSize":  "Small Group (Max 12)",
+        "priceUSD":  2350,
+        "discountPriceUSD":  1999,
+        "rating":  4.94,
+        "reviewCount":  131,
+        "featured":  false,
+        "badge":  "Winter Magic",
+        "image":  "https://images.unsplash.com/photo-1504893524553-b855bce32c67?auto=format\u0026fit=crop\u0026w=1200\u0026q=80",
+        "summary":  "Chase the celestial Northern Lights, soak in geothermal volcanic lagoons, step inside natural crystal blue ice caves, and walk black sand beaches.",
+        "inclusions":  [
+                           "5 nights in handpicked boutique hotels \u0026 aurora glass lodges",
+                           "Nightly guided Northern Lights chasing expeditions with pro photographer",
+                           "Premium admission to Blue Lagoon with silica mud mask \u0026 drink",
+                           "VatnajÃ¶kull glacier hike \u0026 natural blue ice cave exploration",
+                           "Comfortable 4x4 expedition coach with panoramic glass windows",
+                           "Daily artisan Scandinavian buffet breakfasts"
+                       ],
+        "exclusions":  [
+                           "International flights to Keflavik (KEF)",
+                           "Thermal winter clothing rental (crampons provided)",
+                           "Lunches \u0026 beverages not specified"
+                       ],
+        "itinerary":  [
+                          {
+                              "day":  1,
+                              "title":  "Keflavik Arrival \u0026 Blue Lagoon Soak",
+                              "description":  "Relax into milky-blue 38Â°C geothermal waters at the Blue Lagoon before transferring to Reykjavik."
+                          },
+                          {
+                              "day":  2,
+                              "title":  "The Golden Circle: Thingvellir, Geysir \u0026 Gullfoss",
+                              "description":  "Walk between the North American and Eurasian tectonic plates, see Strokkur geyser erupt, and view thundering Gullfoss waterfall."
+                          },
+                          {
+                              "day":  3,
+                              "title":  "South Coast Waterfalls \u0026 Reynisfjara Black Sands",
+                              "description":  "Walk behind the mist of Seljalandsfoss, behold SkÃ³gafoss, and stand on the black basalt sands of Reynisfjara."
+                          },
+                          {
+                              "day":  4,
+                              "title":  "Glacier Lagoon (JÃ¶kulsÃ¡rlÃ³n) \u0026 Diamond Beach",
+                              "description":  "Gaze upon gleaming blue icebergs drifting into the Atlantic and sparkling crystal ice blocks on black volcanic shores."
+                          },
+                          {
+                              "day":  5,
+                              "title":  "VatnajÃ¶kull Natural Blue Ice Cave \u0026 Aurora Hunt",
+                              "description":  "Don crampons to explore inside a shimmering blue subterranean glacier cave. Nighttime dark-sky chase for Aurora Borealis."
+                          },
+                          {
+                              "day":  6,
+                              "title":  "Reykjavik City Stroll \u0026 Departure",
+                              "description":  "Visit HallgrÃ­mskirkja church and Harpa concert hall before escort to Keflavik Airport."
+                          }
+                      ],
+        "airportCode":  "KEF",
+        "flightRoute":  "LHR ➔ KEF",
+        "vibe":  {
+                     "scenery":  10,
+                     "pace":  5,
+                     "social":  2
+                 }
+    },
+    {
+        "id":  "pkg-8",
+        "title":  "Inca Trail \u0026 Sacred Valley Expedition to Machu Picchu",
+        "destinationId":  "dest-8",
+        "destinationName":  "Cusco \u0026 Machu Picchu, Peru",
+        "category":  "Cultural Heritage",
+        "durationDays":  7,
+        "groupSize":  "Small Group (Max 10)",
+        "priceUSD":  1899,
+        "discountPriceUSD":  1599,
+        "rating":  4.93,
+        "reviewCount":  108,
+        "featured":  false,
+        "badge":  "Bucket List",
+        "image":  "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format\u0026fit=crop\u0026w=1200\u0026q=80",
+        "summary":  "Journey through Andean cloud forests along ancient Incan stone trails to behold the breathtaking sunrise over mystical Machu Picchu.",
+        "inclusions":  [
+                           "6 nights in boutique heritage hotels in Cusco \u0026 luxury glamping on trail",
+                           "Official Inca Trail trekking permit \u0026 certified Quechua mountain guide",
+                           "Panoramic Vistadome train tickets between Aguas Calientes \u0026 Ollantaytambo",
+                           "All meals on trek prepared fresh by private expedition mountain chef",
+                           "Machu Picchu citadel sunrise entry ticket \u0026 Huayna Picchu mountain pass",
+                           "Porter team to carry expedition camping equipment and personal duffels"
+                       ],
+        "exclusions":  [
+                           "International flights to Lima / Cusco",
+                           "Sleeping bag rental ($25 on site)",
+                           "Travel insurance covering high altitude"
+                       ],
+        "itinerary":  [
+                          {
+                              "day":  1,
+                              "title":  "Cusco Altitude Acclimatization \u0026 Colonial Plazas",
+                              "description":  "Arrive in Cusco (3,400m). Enjoy coca tea, visit San Pedro Market, and view ancient Incan stone foundations."
+                          },
+                          {
+                              "day":  2,
+                              "title":  "Sacred Valley \u0026 Pisac Terraces",
+                              "description":  "Explore the agricultural terraces of Pisac, meet local alpaca weavers, and tour the stone fortress of Ollantaytambo."
+                          },
+                          {
+                              "day":  3,
+                              "title":  "Inca Trail Trek: Km 82 to Wayllabamba",
+                              "description":  "Begin the legendary trek along the Urubamba river, passing ancient Incan ruins with views of snow-capped Veronica peak."
+                          },
+                          {
+                              "day":  4,
+                              "title":  "Conquering Dead Woman\u0027s Pass (WarmiwaÃ±usqa)",
+                              "description":  "Ascend through Andean cloud forests to the highest pass (4,215m) with panoramic mountain vistas, then camp at Pacaymayo."
+                          },
+                          {
+                              "day":  5,
+                              "title":  "Ruins of Runkurakay to Phuyupatamarca",
+                              "description":  "Trek through orchid-filled cloud forests, exploring terraced stone ruins clinging to mountain crests."
+                          },
+                          {
+                              "day":  6,
+                              "title":  "Inti Punku (Sun Gate) \u0026 Machu Picchu Citadel",
+                              "description":  "Arrive at the Sun Gate as dawn breaks over Machu Picchu. Private 3-hour guided exploration of the lost citadel."
+                          },
+                          {
+                              "day":  7,
+                              "title":  "Vistadome Rail Return to Cusco \u0026 Departure",
+                              "description":  "Ride the scenic Vistadome train along the raging river valley back to Cusco for your onward flight."
+                          }
+                      ],
+        "airportCode":  "CUZ",
+        "flightRoute":  "LIM ➔ CUZ",
+        "vibe":  {
+                     "scenery":  10,
+                     "pace":  8,
+                     "social":  4
+                 }
+    }
+]
