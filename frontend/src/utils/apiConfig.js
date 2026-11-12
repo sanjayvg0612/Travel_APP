@@ -1,21 +1,18 @@
 /**
- * Dynamic API Base URL Resolver for AWS EC2, ALB, CloudFront & Local Environments
+ * API Configuration for AWS Application Load Balancer (ALB) & Path-Based Routing
  * 
- * Automatically derives the API endpoint from the current browser address bar:
- * 1. AWS Application Load Balancer (ALB) or Nginx reverse proxy (port 80/443):
- *    Uses `${window.location.origin}/api`
- * 2. AWS EC2 Public IP / DNS on custom ports (e.g. frontend on :3000, backend on :5000):
- *    Automatically detects window.location.hostname and connects to `${protocol}//${hostname}:5000/api`
- * 3. Local Development:
- *    Uses relative `/api` via Vite proxy, with automatic fallback to port 5000
- * 4. Manual Override:
- *    Supports VITE_API_URL in .env or window.__API_URL__ runtime configuration
+ * Setup:
+ * - Single Internet-Facing ALB (1 DNS name, 0 CORS issues)
+ * - Listener Rule 1: Path `/api/*` -> Backend Target Group (Port 5000, Health check `/api/health`)
+ * - Default Rule: Path `/*`        -> Frontend Target Group (Port 80, Health check `/`)
+ * 
+ * In this design, the browser accesses both the website and the backend API through the same ALB origin.
+ * Therefore, all API requests use relative `/api` paths:
+ * e.g., `fetch('/api/packages')`, `fetch('/api/bookings')`
  */
 
-let resolvedApiBaseUrl = null;
-
 export const getApiBaseUrl = () => {
-  // 1. Explicit override via build-time or runtime environment
+  // 1. Explicit override via build-time or runtime environment (optional)
   if (import.meta.env && import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL.replace(/\/+$/, '');
   }
@@ -23,79 +20,35 @@ export const getApiBaseUrl = () => {
     return window.__API_URL__.trim().replace(/\/+$/, '');
   }
 
-  // 2. Browser dynamic URL resolution
-  if (typeof window !== 'undefined') {
-    if (resolvedApiBaseUrl) {
-      return resolvedApiBaseUrl;
-    }
-
-    const { protocol, hostname, port } = window.location;
-
-    // Direct access to an AWS Public IP or AWS DNS name on a custom frontend port (e.g. :3000)
-    // Automatically route API calls to port 5000 on that same AWS host/IP
-    if (port && port !== '80' && port !== '443' && port !== '5000') {
-      if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
-        resolvedApiBaseUrl = `${protocol}//${hostname}:5000/api`;
-        return resolvedApiBaseUrl;
-      }
-    }
-
-    // Standard ALB / Domain / Reverse Proxy deployment (same origin)
-    const portPart = port && port !== '80' && port !== '443' ? `:${port}` : '';
-    resolvedApiBaseUrl = `${protocol}//${hostname}${portPart}/api`;
-    return resolvedApiBaseUrl;
-  }
-
+  // 2. Default: Relative `/api`
+  // Automatically routes through the ALB's path-based listener rule (`/api/*` -> Backend Target Group)
+  // Also works with local Vite proxy during development
   return '/api';
 };
 
 /**
- * Builds a clean, fully-qualified or relative endpoint URL
+ * Normalizes and builds clean `/api/...` endpoints
  */
 export const buildApiUrl = (endpoint) => {
   const base = getApiBaseUrl();
-  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const clean = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
 
-  // If base ends with /api and cleanEndpoint starts with /api, prevent duplication
-  if (base.endsWith('/api') && cleanEndpoint.startsWith('/api')) {
-    return `${base.slice(0, -4)}${cleanEndpoint}`;
+  // If base is relative `/api` and endpoint already starts with `/api`, prevent duplicate `/api/api`
+  if (base === '/api') {
+    return clean.startsWith('/api') ? clean : `/api${clean}`;
   }
-  return `${base}${cleanEndpoint}`;
+
+  if (base.endsWith('/api') && clean.startsWith('/api')) {
+    return `${base.slice(0, -4)}${clean}`;
+  }
+
+  return `${base}${clean}`;
 };
 
 /**
- * Resilient fetch that executes against the resolved browser URL,
- * with automatic fallback to the alternative port if running standalone on EC2.
+ * Standard fetch wrapper for all API operations
  */
 export const apiFetch = async (endpoint, options = {}) => {
-  const primaryUrl = buildApiUrl(endpoint);
-
-  try {
-    const res = await fetch(primaryUrl, options);
-    return res;
-  } catch (primaryErr) {
-    // If primary relative/host call failed on a custom port, probe port 5000 on the same browser host
-    if (typeof window !== 'undefined') {
-      const { protocol, hostname, port } = window.location;
-      if (port && port !== '5000') {
-        const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-        const normalizedEndpoint = cleanEndpoint.startsWith('/api') ? cleanEndpoint : `/api${cleanEndpoint}`;
-        const altUrl = `${protocol}//${hostname}:5000${normalizedEndpoint}`;
-
-        if (altUrl !== primaryUrl) {
-          try {
-            const fallbackRes = await fetch(altUrl, options);
-            if (fallbackRes.ok) {
-              resolvedApiBaseUrl = `${protocol}//${hostname}:5000/api`;
-              return fallbackRes;
-            }
-          } catch {
-            // Re-throw original error
-          }
-        }
-      }
-    }
-    throw primaryErr;
-  }
+  const url = buildApiUrl(endpoint);
+  return fetch(url, options);
 };
-

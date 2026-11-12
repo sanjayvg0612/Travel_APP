@@ -30,6 +30,14 @@ def write_json(filename, data):
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
+@app.route('/', methods=['GET'])
+def root_check():
+    return jsonify({
+        "status": "online",
+        "service": "Wanderlust Travel API (Flask)",
+        "healthCheck": "/api/health"
+    }), 200
+
 @app.route('/api/health', methods=['GET'])
 def health_check():
     return jsonify({

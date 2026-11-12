@@ -29,9 +29,18 @@ const writeJSON = (filename, data) => {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
 };
 
-// 1. Health Check
+// 1. Health Checks (ALB Target Group Health Checks)
+// Supports both '/' and '/api/health' for AWS ALB Target Group health checks
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'online',
+    service: 'Wanderlust Travel API',
+    healthCheck: '/api/health'
+  });
+});
+
 app.get('/api/health', (req, res) => {
-  res.json({
+  res.status(200).json({
     status: 'online',
     timestamp: new Date().toISOString(),
     service: 'Wanderlust Travel API',

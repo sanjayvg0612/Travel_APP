@@ -1,13 +1,14 @@
 // ===================================================================
-// WANDERLUST RUNTIME API CONFIGURATION (FOR MULTI-SERVER DEPLOYMENTS)
+// WANDERLUST RUNTIME API CONFIGURATION (FOR AWS ALB PATH-BASED ROUTING)
 // ===================================================================
 //
-// 1. If Frontend & Backend are on the SAME server or behind an AWS ALB:
-//    Leave this as an empty string (""). The app automatically uses the browser URL!
+// In your AWS Application Load Balancer setup:
+// - ALB DNS: http[s]://<your-alb-name>.us-east-1.elb.amazonaws.com
+// - Listener Rule 1: /api/* -> Backend Target Group (Port 5000)
+// - Default Rule:    /*     -> Frontend Target Group (Port 80)
 //
-// 2. If Frontend & Backend are on TWO SEPARATE SERVERS:
-//    Enter your Backend server's Public IP or DNS address below:
-//    Example: window.__API_URL__ = "http://54.210.88.99:5000/api";
+// Because the website and the API share the same ALB origin,
+// leave window.__API_URL__ as empty ("").
+// The frontend uses relative `/api` automatically with zero CORS issues!
 //
 window.__API_URL__ = "";
-
