@@ -252,6 +252,11 @@ app.post('/api/bookings', (req, res) => {
     roomType: roomType || 'standard',
     selectedAddons: selectedAddons || [],
     totalPriceUSD: totalPriceUSD || 0,
+    discountUSD: req.body.discountUSD || 0,
+    paymentMethod: req.body.paymentMethod || 'Credit Card',
+    paymentTransactionId: req.body.paymentTransactionId || `TXN-${Math.floor(10000000 + Math.random() * 90000000)}`,
+    cardLast4: req.body.cardLast4 || '8899',
+    paymentStatus: 'Paid in Full',
     specialRequests: specialRequests ? specialRequests.trim() : '',
     status: 'Confirmed',
     createdAt: new Date().toISOString()

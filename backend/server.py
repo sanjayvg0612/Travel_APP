@@ -210,6 +210,11 @@ def handle_bookings():
         "roomType": data.get('roomType', 'standard'),
         "selectedAddons": data.get('selectedAddons', []),
         "totalPriceUSD": data.get('totalPriceUSD', 0),
+        "discountUSD": data.get('discountUSD', 0),
+        "paymentMethod": data.get('paymentMethod', 'Credit Card'),
+        "paymentTransactionId": data.get('paymentTransactionId', f"TXN-{random.randint(10000000, 99999999)}"),
+        "cardLast4": data.get('cardLast4', '8899'),
+        "paymentStatus": "Paid in Full",
         "specialRequests": data.get('specialRequests', '').strip(),
         "status": "Confirmed",
         "createdAt": datetime.now().isoformat()

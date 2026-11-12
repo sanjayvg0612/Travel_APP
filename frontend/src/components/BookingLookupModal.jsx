@@ -152,7 +152,7 @@ export const BookingLookupModal = () => {
                   <strong style={{ color: 'var(--text-main)', fontSize: '0.95rem' }}>{foundBooking.travelerName}</strong>
                 </div>
                 <div>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>VOUCHER REFERENCE</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>BOOKING CODE</span>
                   <strong style={{ color: 'var(--accent-primary)', fontFamily: 'var(--font-mono)', fontSize: '0.95rem' }}>{foundBooking.id}</strong>
                 </div>
                 <div>
@@ -160,10 +160,28 @@ export const BookingLookupModal = () => {
                   <strong style={{ color: 'var(--text-main)', fontSize: '0.95rem' }}>{foundBooking.travelDate}</strong>
                 </div>
                 <div>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>TOTAL AMOUNT</span>
-                  <strong style={{ color: 'var(--accent-primary)', fontSize: '0.95rem' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>CABIN & SUITE</span>
+                  <strong style={{ color: 'var(--text-main)', fontSize: '0.95rem' }}>{foundBooking.roomType || 'Suite 01A - Presidential Terrace'}</strong>
+                </div>
+                <div>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>PAYMENT METHOD</span>
+                  <strong style={{ color: 'var(--text-main)', fontSize: '0.95rem' }}>{foundBooking.paymentMethod || 'Credit Card (Amex Black)'}</strong>
+                </div>
+                <div>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>TRANSACTION ID</span>
+                  <strong style={{ color: 'var(--accent-primary)', fontFamily: 'var(--font-mono)', fontSize: '0.88rem' }}>
+                    {foundBooking.paymentTransactionId || 'TXN-89217492'}
+                  </strong>
+                </div>
+                <div>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>TOTAL AMOUNT SETTLED</span>
+                  <strong style={{ color: 'var(--accent-primary)', fontSize: '1.1rem' }}>
                     {formatPrice ? formatPrice(foundBooking.totalPriceUSD || 0) : `$${foundBooking.totalPriceUSD}`}
                   </strong>
+                </div>
+                <div>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>PAYMENT STATUS</span>
+                  <strong style={{ color: '#10b981', fontSize: '0.95rem' }}>✓ Paid in Full</strong>
                 </div>
               </div>
 
