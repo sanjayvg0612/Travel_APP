@@ -244,6 +244,91 @@
   justify-content: center;
 }
 
+/* Mobile Navigation Button & Drawer */
+.mobile-menu-btn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  color: var(--text-main);
+  font-size: 1.3rem;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.mobile-menu-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.mobile-nav-drawer {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-glass-strong);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-bottom: 1px solid var(--border-glass);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+  padding: 1.8rem 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: slideInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 150;
+}
+
+.mobile-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.mobile-nav-links a {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: color 0.2s ease;
+}
+
+.mobile-nav-links a:hover {
+  color: var(--accent-primary);
+}
+
+.mobile-nav-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .desktop-nav {
+    display: none;
+  }
+  .desktop-only-btn {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+}
+
 /* ===================================================================
    HERO MODERN LUXURY
    =================================================================== */
@@ -657,6 +742,25 @@
 
 .match-text strong {
   color: var(--accent-primary);
+}
+
+@media (max-width: 860px) {
+  .vibe-matrix-card {
+    padding: 1.5rem 1.25rem;
+  }
+  .vibe-sliders-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .vibe-matrix-actions {
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: stretch;
+  }
+  .vibe-matrix-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* ===================================================================

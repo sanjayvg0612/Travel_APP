@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTravel } from '../context/TravelContext';
 
 export const Navbar = () => {
@@ -17,6 +17,10 @@ export const Navbar = () => {
     backendOnline
   } = useTravel();
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
   return (
     <header className="navbar" id="main-navigation">
       <div className="container nav-content">
@@ -25,7 +29,8 @@ export const Navbar = () => {
           <span>WANDER<span>LUST</span></span>
         </a>
 
-        <nav aria-label="Editorial Sections">
+        {/* Desktop Navigation Links */}
+        <nav aria-label="Editorial Sections" className="desktop-nav">
           <ul className="nav-links">
             <li><a href="#vibe-matrix-anchor" className="nav-link">Vibe Matrix</a></li>
             <li><a href="#twilight-anchor" className="nav-link">Day & Night</a></li>
@@ -35,6 +40,7 @@ export const Navbar = () => {
           </ul>
         </nav>
 
+        {/* Action Controls */}
         <div className="nav-actions">
           {/* 4 Curated Editorial Themes Switcher */}
           <div className="theme-picker-box" title="Curated Editorial Aesthetics">
@@ -64,10 +70,10 @@ export const Navbar = () => {
             />
           </div>
 
-          {/* Ambient Soundscapes Synthesizer */}
+          {/* Ambient Soundscapes Synthesizer (Desktop) */}
           <button
             type="button"
-            className={`soundscape-btn ${isAtmospherePlaying ? 'playing' : ''}`}
+            className={`soundscape-btn desktop-only-btn ${isAtmospherePlaying ? 'playing' : ''}`}
             onClick={toggleAtmosphere}
             title="Toggle Generative Nature Soundscape"
           >
@@ -82,7 +88,7 @@ export const Navbar = () => {
           {/* Digital Passport Stamp Book */}
           <button
             type="button"
-            className="passport-toggle-btn"
+            className="passport-toggle-btn desktop-only-btn"
             onClick={() => setIsPassportOpen(true)}
             title="View Digital Passport & Visa Stamps"
           >
@@ -93,7 +99,7 @@ export const Navbar = () => {
           {/* Booking Lookup Trigger */}
           <button
             type="button"
-            className="passport-toggle-btn"
+            className="passport-toggle-btn desktop-only-btn"
             onClick={() => setIsBookingLookupOpen(true)}
             title="Retrieve Verified Reservation & Boarding Pass"
             style={{ padding: '0.4rem 0.8rem' }}
@@ -105,6 +111,7 @@ export const Navbar = () => {
           {/* API Connectivity Status */}
           {backendOnline && (
             <span
+              className="api-status-badge desktop-only-btn"
               title="Connected to Wanderlust Concierge REST API"
               style={{
                 fontSize: '0.68rem',
@@ -153,8 +160,87 @@ export const Navbar = () => {
               <span className="badge-count">{wishlist.length}</span>
             )}
           </button>
+
+          {/* Mobile Hamburger Button */}
+          <button
+            type="button"
+            className="mobile-menu-btn"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Drawer Menu */}
+      {isMobileMenuOpen && (
+        <div className="mobile-nav-drawer">
+          <ul className="mobile-nav-links">
+            <li>
+              <a href="#vibe-matrix-anchor" onClick={closeMobileMenu}>
+                🧭 Vibe Matrix
+              </a>
+            </li>
+            <li>
+              <a href="#twilight-anchor" onClick={closeMobileMenu}>
+                🌅 Day & Night View
+              </a>
+            </li>
+            <li>
+              <a href="#destinations-section" onClick={closeMobileMenu}>
+                🏛️ Sanctuaries
+              </a>
+            </li>
+            <li>
+              <a href="#packages-section" onClick={closeMobileMenu}>
+                ✨ Grand Expeditions
+              </a>
+            </li>
+            <li>
+              <a href="#dispatches-section" onClick={closeMobileMenu}>
+                ✍️ Explorer Dispatches
+              </a>
+            </li>
+          </ul>
+
+          <div className="mobile-nav-actions">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              style={{ width: '100%', justifyContent: 'center' }}
+              onClick={() => {
+                closeMobileMenu();
+                setIsPassportOpen(true);
+              }}
+            >
+              🛂 Digital Passport ({stamps.length} Stamps)
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              style={{ width: '100%', justifyContent: 'center' }}
+              onClick={() => {
+                closeMobileMenu();
+                setIsBookingLookupOpen(true);
+              }}
+            >
+              🎫 Find Reservation & Pass
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              style={{ width: '100%', justifyContent: 'center' }}
+              onClick={() => {
+                toggleAtmosphere();
+              }}
+            >
+              🎵 {isAtmospherePlaying ? 'Mute Atmosphere' : 'Play Nature Atmosphere'}
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
