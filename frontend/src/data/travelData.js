@@ -429,3 +429,61 @@ export const ADDONS = [
   { id: 'photo-package', name: 'Vogue-Style Personal Vacation Photographer (60+ Stills)', priceUSD: 290, icon: '📷' },
   { id: 'sommelier-upgrade', name: 'Private Sommelier Wine Cellar Tasting & Pairings', priceUSD: 220, icon: '🍷' }
 ];
+
+export const SEED_REVIEWS = [
+  {
+    id: "rev-1",
+    packageId: "pkg-1",
+    author: "Elena Rostova",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+    location: "Geneva, Switzerland",
+    rating: 5,
+    date: "2026-08-14",
+    trip: "Santorini Caldera Sunset & Aegean Island Odyssey",
+    comment: "The catamaran cruise at sunset was hands down the most magical evening of my life! Our sommelier Nikos was exceptional. Truly a five-star escape from start to finish."
+  },
+  {
+    id: "rev-2",
+    packageId: "pkg-2",
+    author: "David Chen",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+    location: "San Francisco, USA",
+    rating: 5,
+    date: "2026-07-29",
+    trip: "Grand Japan: Ancient Kyoto Temples to Tokyo Neon",
+    comment: "Incredible balance between high-tech Tokyo and the spiritual stillness of Kyoto. The private ryokan onsen stay with direct Mount Fuji vistas was phenomenal."
+  },
+  {
+    id: "rev-3",
+    packageId: "pkg-3",
+    author: "Sofia Moreau",
+    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80",
+    location: "Lyon, France",
+    rating: 5,
+    date: "2026-09-02",
+    trip: "Amalfi Coast & Capri Private Yacht Experience",
+    comment: "Sailing past the Faraglioni rocks of Capri on a private Riva yacht with chilled champagne in hand felt like being in a classic film. Unforgettable."
+  },
+  {
+    id: "rev-4",
+    packageId: "pkg-5",
+    author: "Marcus Lindqvist",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+    location: "Stockholm, Sweden",
+    rating: 5,
+    date: "2026-06-18",
+    trip: "Swiss Alpine Grandeur: Glacier Express & Matterhorn",
+    comment: "The Glacier Express Excellence Class was pure perfection. Waking up in Zermatt to the direct view of the Matterhorn bathed in golden morning light is etched in my memory forever."
+  },
+  {
+    id: "rev-5",
+    packageId: "pkg-6",
+    author: "Amara Okafor",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
+    location: "London, UK",
+    rating: 5,
+    date: "2026-08-05",
+    trip: "Serengeti Great Migration & Zanzibar Spice Sands",
+    comment: "Seeing lions on the open plains of Serengeti and floating in a hot air balloon over the migration was surreal. Concluding on the white sands of Zanzibar was paradise."
+  }
+];

@@ -5,10 +5,13 @@ import { HeroMasthead } from './components/HeroMasthead';
 import { TwilightSlider } from './components/TwilightSlider';
 import { DestinationsGrid } from './components/DestinationsGrid';
 import { PackagesGrid } from './components/PackagesGrid';
+import { ReviewsSection } from './components/ReviewsSection';
+import { NewsletterSection } from './components/NewsletterSection';
 import { ItineraryModal } from './components/ItineraryModal';
 import { BoardingPassModal } from './components/BoardingPassModal';
 import { PassportModal } from './components/PassportModal';
 import { WishlistDrawer } from './components/WishlistDrawer';
+import { BookingLookupModal } from './components/BookingLookupModal';
 
 export const App = () => {
   return (
@@ -20,6 +23,8 @@ export const App = () => {
         <TwilightSlider />
         <DestinationsGrid />
         <PackagesGrid />
+        <ReviewsSection />
+        <NewsletterSection />
       </main>
 
       <footer style={{ background: 'var(--bg-primary)', borderTop: '1px solid var(--border-glass)', padding: '4rem 0 2rem' }}>
@@ -39,6 +44,7 @@ export const App = () => {
       <BoardingPassModal />
       <PassportModal />
       <WishlistDrawer />
+      <BookingLookupModal />
     </TravelProvider>
   );
 };

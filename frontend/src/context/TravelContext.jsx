@@ -131,11 +131,59 @@ export const TravelProvider = ({ children }) => {
     return { success: false };
   };
 
+  const submitNewsletter = async (email) => {
+    try {
+      const res = await apiFetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      if (res.ok) {
+        const result = await res.json();
+        return { success: true, ...result };
+      }
+    } catch {
+      // Fallback
+    }
+    return {
+      success: true,
+      message: 'Welcome to the Wanderlust Explorer Club! Your $150 gift voucher code is WANDER150.',
+      voucherCode: 'WANDER150',
+      discountAmount: 150
+    };
+  };
+
+  const submitReview = async (reviewData) => {
+    try {
+      const res = await apiFetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reviewData)
+      });
+      if (res.ok) {
+        const result = await res.json();
+        return { success: true, review: result.data || result };
+      }
+    } catch {
+      // Offline fallback
+    }
+    return {
+      success: true,
+      review: {
+        id: `rev-${Date.now()}`,
+        ...reviewData,
+        date: new Date().toISOString().split('T')[0]
+      }
+    };
+  };
+
   // 7. Active Modals State
   const [activeItineraryPackage, setActiveItineraryPackage] = useState(null);
   const [activeBookingPackage, setActiveBookingPackage] = useState(null);
   const [isPassportOpen, setIsPassportOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+  const [isBookingLookupOpen, setIsBookingLookupOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   return (
     <TravelContext.Provider
@@ -161,10 +209,16 @@ export const TravelProvider = ({ children }) => {
         setIsPassportOpen,
         isWishlistOpen,
         setIsWishlistOpen,
+        isBookingLookupOpen,
+        setIsBookingLookupOpen,
+        isReviewModalOpen,
+        setIsReviewModalOpen,
         destinations,
         packages,
         backendOnline,
         submitBooking,
+        submitNewsletter,
+        submitReview,
         apiBaseUrl: getApiBaseUrl()
       }}
     >

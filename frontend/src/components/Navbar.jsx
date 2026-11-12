@@ -13,6 +13,7 @@ export const Navbar = () => {
     stamps,
     setIsPassportOpen,
     setIsWishlistOpen,
+    setIsBookingLookupOpen,
     backendOnline
   } = useTravel();
 
@@ -30,6 +31,7 @@ export const Navbar = () => {
             <li><a href="#twilight-anchor" className="nav-link">Day & Night</a></li>
             <li><a href="#destinations-section" className="nav-link">Sanctuaries</a></li>
             <li><a href="#packages-section" className="nav-link">Expeditions</a></li>
+            <li><a href="#dispatches-section" className="nav-link">Dispatches</a></li>
           </ul>
         </nav>
 
@@ -86,6 +88,18 @@ export const Navbar = () => {
           >
             <span>🛂</span>
             <span className="passport-stamp-badge">{stamps.length} Stamps</span>
+          </button>
+
+          {/* Booking Lookup Trigger */}
+          <button
+            type="button"
+            className="passport-toggle-btn"
+            onClick={() => setIsBookingLookupOpen(true)}
+            title="Retrieve Verified Reservation & Boarding Pass"
+            style={{ padding: '0.4rem 0.8rem' }}
+          >
+            <span>🎫</span>
+            <span style={{ fontSize: '0.78rem' }}>Find Pass</span>
           </button>
 
           {/* API Connectivity Status */}
