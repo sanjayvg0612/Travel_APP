@@ -96,16 +96,16 @@ export const Navbar = () => {
             <span className="passport-stamp-badge">{stamps.length} Stamps</span>
           </button>
 
-          {/* Booking Lookup Trigger */}
+          {/* Booking Status & Tracker Trigger */}
           <button
             type="button"
             className="passport-toggle-btn desktop-only-btn"
             onClick={() => setIsBookingLookupOpen(true)}
-            title="Retrieve Verified Reservation & Boarding Pass"
+            title="Track Live Reservation Status & Boarding Pass"
             style={{ padding: '0.4rem 0.8rem' }}
           >
-            <span>🎫</span>
-            <span style={{ fontSize: '0.78rem' }}>Find Pass</span>
+            <span>🧭</span>
+            <span style={{ fontSize: '0.78rem' }}>Track Status</span>
           </button>
 
           {/* API Connectivity Status */}
@@ -226,7 +226,7 @@ export const Navbar = () => {
                 setIsBookingLookupOpen(true);
               }}
             >
-              🎫 Find Reservation & Pass
+              🧭 Track Booking Status & Pass
             </button>
             <button
               type="button"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useTravel } from '../context/TravelContext';
 import { ADDONS } from '../data/travelData';
 
@@ -10,11 +10,40 @@ export const BoardingPassModal = () => {
     addStamp,
     destinations,
     submitBooking,
-    showToast
+    showToast,
+    openBookingTracker
   } = useTravel();
 
-  // Step state: 1 = Manifest, 2 = Payment, 3 = Confirmed
+  // Step state: 1 = Manifest & Dates, 2 = Payment Gateway, 3 = Confirmed & Ticket
   const [step, setStep] = useState(1);
+
+  // Available Departure Windows Generator
+  const availableSlots = useMemo(() => {
+    const now = new Date();
+    const duration = activeBookingPackage?.durationDays || 7;
+
+    const buildSlot = (daysOffset, status, statusColor, tag) => {
+      const start = new Date(now);
+      start.setDate(start.getDate() + daysOffset);
+      const end = new Date(start);
+      end.setDate(end.getDate() + duration);
+
+      return {
+        startDate: start.toISOString().split('T')[0],
+        label: `${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`,
+        status,
+        statusColor,
+        tag
+      };
+    };
+
+    return [
+      buildSlot(7, '2 Suites Left', '#f43f5e', 'High Demand 🔥'),
+      buildSlot(21, '4 Suites Left', '#10b981', 'Prime Weather'),
+      buildSlot(38, 'Selling Fast', '#f59e0b', 'Sunset Charter'),
+      buildSlot(56, 'Available', '#38bdf8', 'Early Bird Special')
+    ];
+  }, [activeBookingPackage]);
 
   // Step 1: Manifest state
   const [date, setDate] = useState(() => {
@@ -186,7 +215,7 @@ export const BoardingPassModal = () => {
 
   return (
     <div className="modal-overlay" onClick={handleClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '860px' }}>
+      <div className="modal-container" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '880px' }}>
         <button type="button" className="modal-close-btn" onClick={handleClose} aria-label="Close booking">
           ✕
         </button>
@@ -198,7 +227,7 @@ export const BoardingPassModal = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', fontSize: '0.82rem', fontFamily: 'var(--font-mono)' }}>
             <span style={{ color: step >= 1 ? 'var(--accent-primary)' : 'var(--text-muted)', fontWeight: step === 1 ? 800 : 500, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: step >= 1 ? 'var(--accent-primary)' : 'transparent', color: step >= 1 ? '#000' : 'var(--text-muted)', border: '1px solid var(--accent-primary)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem' }}>1</span>
-              Manifest & Suite
+              Available Dates & Manifest
             </span>
             <span style={{ color: 'var(--border-glass)' }}>—</span>
             <span style={{ color: step >= 2 ? 'var(--accent-primary)' : 'var(--text-muted)', fontWeight: step === 2 ? 800 : 500, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
@@ -208,7 +237,7 @@ export const BoardingPassModal = () => {
             <span style={{ color: 'var(--border-glass)' }}>—</span>
             <span style={{ color: step >= 3 ? '#10b981' : 'var(--text-muted)', fontWeight: step === 3 ? 800 : 500, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: step >= 3 ? '#10b981' : 'transparent', color: step >= 3 ? '#000' : 'var(--text-muted)', border: '1px solid #10b981', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem' }}>3</span>
-              Pass & Invoice
+              Pass & Live Status
             </span>
           </div>
 
@@ -218,7 +247,7 @@ export const BoardingPassModal = () => {
         </div>
 
         {/* ===================================================================
-            STEP 1: EXPEDITION MANIFEST & SUITE CUSTOMIZATION
+            STEP 1: AVAILABLE DATES, SUITE & EXPEDITION MANIFEST
            =================================================================== */}
         {step === 1 && (
           <div style={{ padding: '2.5rem' }}>
@@ -230,11 +259,59 @@ export const BoardingPassModal = () => {
             </h3>
 
             <form onSubmit={handleProceedToPayment}>
+              {/* AVAILABLE DEPARTURE WINDOWS SELECTOR */}
+              <div style={{ marginBottom: '1.75rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
+                  <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                    🗓️ Select Available Departure Window
+                  </label>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                    Real-time Charter Availability
+                  </span>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '0.75rem' }}>
+                  {availableSlots.map(slot => {
+                    const isSelected = date === slot.startDate;
+                    return (
+                      <div
+                        key={slot.startDate}
+                        onClick={() => setDate(slot.startDate)}
+                        style={{
+                          padding: '0.85rem 1rem',
+                          background: isSelected ? 'rgba(212, 175, 55, 0.15)' : 'var(--bg-primary)',
+                          border: isSelected ? '1.5px solid var(--accent-primary)' : '1px solid var(--border-glass)',
+                          borderRadius: 'var(--radius-sm)',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          boxShadow: isSelected ? '0 0 15px rgba(212, 175, 55, 0.2)' : 'none'
+                        }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+                          <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: slot.statusColor, fontWeight: 700, textTransform: 'uppercase' }}>
+                            {slot.status}
+                          </span>
+                          <span style={{ fontSize: '0.65rem', color: 'var(--accent-primary)', fontFamily: 'var(--font-mono)' }}>
+                            {slot.tag}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '0.88rem', fontWeight: 700, color: isSelected ? '#fff' : 'var(--text-main)', marginBottom: '0.2rem' }}>
+                          {slot.label}
+                        </div>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                          Starts {slot.startDate}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* Row 1: Date & Guests */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem', marginBottom: '1.25rem' }}>
                 <div>
                   <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>
-                    Departure Window Date *
+                    Custom Departure Date
                   </label>
                   <input
                     type="date"
@@ -555,7 +632,6 @@ export const BoardingPassModal = () => {
               {paymentMethod === 'upi' && (
                 <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-md)', padding: '1.8rem', textAlign: 'center', marginBottom: '1.5rem' }}>
                   <div style={{ display: 'inline-flex', padding: '0.8rem', background: '#ffffff', borderRadius: '12px', marginBottom: '1rem', boxShadow: '0 8px 25px rgba(0,0,0,0.5)' }}>
-                    {/* Simulated High-Res UPI QR Code */}
                     <div style={{ width: '140px', height: '140px', background: 'repeating-linear-gradient(45deg, #111 0, #111 8px, #fff 8px, #fff 16px)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <span style={{ background: '#fff', padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 800, color: '#000' }}>
                         SCAN TO PAY
@@ -905,10 +981,21 @@ export const BoardingPassModal = () => {
               </div>
             </div>
 
-            {/* Actions: Print & Close */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
+            {/* Actions: Track Status, Print & Close */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => {
+                  const id = confirmedBooking.id;
+                  handleClose();
+                  openBookingTracker(id);
+                }}
+              >
+                🧭 Track Live Booking Status
+              </button>
               <button type="button" className="btn btn-secondary" onClick={() => window.print()}>
-                <span>🖨️</span> Print Boarding Pass & Tax Invoice
+                <span>🖨️</span> Print Pass & Invoice
               </button>
               <button type="button" className="btn btn-primary" onClick={handleClose}>
                 Done

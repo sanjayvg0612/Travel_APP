@@ -201,7 +201,13 @@ export const TravelProvider = ({ children }) => {
   const [isPassportOpen, setIsPassportOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isBookingLookupOpen, setIsBookingLookupOpen] = useState(false);
+  const [trackerBookingId, setTrackerBookingId] = useState('');
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
+  const openBookingTracker = (code = '') => {
+    setTrackerBookingId(code);
+    setIsBookingLookupOpen(true);
+  };
 
   return (
     <TravelContext.Provider
@@ -233,6 +239,9 @@ export const TravelProvider = ({ children }) => {
         setIsWishlistOpen,
         isBookingLookupOpen,
         setIsBookingLookupOpen,
+        trackerBookingId,
+        setTrackerBookingId,
+        openBookingTracker,
         isReviewModalOpen,
         setIsReviewModalOpen,
         destinations,
