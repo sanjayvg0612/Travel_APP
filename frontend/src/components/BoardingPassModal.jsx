@@ -13,46 +13,52 @@ export const BoardingPassModal = () => {
     showToast
   } = useTravel();
 
+  // Step state: 1 = Manifest, 2 = Payment, 3 = Confirmed
+  const [step, setStep] = useState(1);
+
   // Step 1: Manifest state
-  const [step, setStep] = useState(1); // 1 = Manifest, 2 = Payment, 3 = Confirmed Pass
   const [date, setDate] = useState(() => {
     const d = new Date();
     d.setDate(d.getDate() + 7);
     return d.toISOString().split('T')[0];
   });
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('+1 (555) 234-5678');
+  const [name, setName] = useState('Sanjay Kumar');
+  const [email, setEmail] = useState('sanjay@traveler.com');
+  const [phone, setPhone] = useState('+91 98765 43210');
   const [guestCount, setGuestCount] = useState(2);
   const [cabinSuite, setCabinSuite] = useState('Suite 01A - Royal Presidential Terrace');
   const [specialRequests, setSpecialRequests] = useState('');
   const [selectedAddons, setSelectedAddons] = useState([]);
 
   // Step 2: Payment state
-  const [paymentMethod, setPaymentMethod] = useState('card'); // 'card', 'apple', 'wire'
-  const [cardNumber, setCardNumber] = useState('4532 •••• •••• 8899');
-  const [cardHolder, setCardHolder] = useState('');
+  // Methods: 'card', 'upi', 'apple', 'netbanking', 'crypto', 'wire'
+  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [cardNumber, setCardNumber] = useState('4532 8901 2345 8899');
+  const [cardHolder, setCardHolder] = useState('SANJAY KUMAR');
   const [cardExpiry, setCardExpiry] = useState('08/29');
   const [cardCvv, setCardCvv] = useState('889');
+  const [upiId, setUpiId] = useState('sanjay@okhdfcbank');
+  const [selectedBank, setSelectedBank] = useState('HDFC Bank');
+  const [cryptoCoin, setCryptoCoin] = useState('USDT (TRC20)');
   const [voucherCode, setVoucherCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
-  const [voucherApplied, setVoucherApplied] = useState(false);
 
-  // Step 3: Confirmation state
-  const [confirmedBooking, setConfirmedBooking] = useState(null);
+  // Loading & confirmation state
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [processingStatus, setProcessingStatus] = useState('');
+  const [confirmedBooking, setConfirmedBooking] = useState(null);
 
   if (!activeBookingPackage) return null;
   const pkg = activeBookingPackage;
 
-  // Price calculations
+  // Pricing
   const perPersonPrice = pkg.discountPriceUSD || pkg.priceUSD || 2800;
   const baseSubtotal = perPersonPrice * guestCount;
   const addonsTotal = selectedAddons.reduce((acc, id) => {
     const item = ADDONS.find(a => a.id === id);
     return acc + (item ? item.priceUSD * guestCount : 0);
   }, 0);
-  const taxesAndDues = Math.round((baseSubtotal + addonsTotal) * 0.05); // 5% port & sanctuary dues
+  const taxesAndDues = Math.round((baseSubtotal + addonsTotal) * 0.05); // 5% port dues
   const grandTotal = Math.max(0, baseSubtotal + addonsTotal + taxesAndDues - discountAmount);
 
   const toggleAddon = (id) => {
@@ -64,12 +70,11 @@ export const BoardingPassModal = () => {
   const applyVoucher = (e) => {
     e?.preventDefault();
     const cleanCode = voucherCode.trim().toUpperCase();
-    if (cleanCode === 'WANDER150' || cleanCode === 'VIP150' || cleanCode === 'SANCTUARY150') {
+    if (cleanCode === 'WANDER150' || cleanCode === 'VIP150' || cleanCode === 'DISCOUNT150') {
       setDiscountAmount(150);
-      setVoucherApplied(true);
-      if (showToast) showToast('VIP Voucher applied! $150 credit deducted.', '🎟️');
+      if (showToast) showToast('VIP Voucher verified: $150 credit applied!', '🎟️');
     } else {
-      if (showToast) showToast('Invalid code. Try WANDER150 from our club newsletter!', '⚠️');
+      if (showToast) showToast('Invalid code. Try WANDER150 for $150 off!', '⚠️');
     }
   };
 
@@ -83,9 +88,27 @@ export const BoardingPassModal = () => {
     setStep(2);
   };
 
+  const formatCardInput = (val) => {
+    const cleaned = val.replace(/\D/g, '').slice(0, 16);
+    const parts = [];
+    for (let i = 0; i < cleaned.length; i += 4) {
+      parts.push(cleaned.slice(i, i + 4));
+    }
+    setCardNumber(parts.join(' ') || '');
+  };
+
   const handleAuthorizePayment = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    setProcessingStatus('Connecting 256-Bit SSL Handshake...');
+    await new Promise(r => setTimeout(r, 600));
+
+    setProcessingStatus(`Authorizing via ${paymentMethod.toUpperCase()} Gateway...`);
+    await new Promise(r => setTimeout(r, 800));
+
+    setProcessingStatus('Verifying Port Reservation & Banking Clearance...');
+    await new Promise(r => setTimeout(r, 600));
 
     const randomRef = Math.floor(1000 + Math.random() * 9000);
     const fallbackBookingId = `TRV-${new Date().getFullYear()}-${randomRef}`;
@@ -95,6 +118,13 @@ export const BoardingPassModal = () => {
     if (dest && dest.stampCode) {
       addStamp(dest.stampCode);
     }
+
+    let methodDisplayName = 'Credit Card (Amex Black)';
+    if (paymentMethod === 'upi') methodDisplayName = `UPI Instant (${upiId})`;
+    else if (paymentMethod === 'apple') methodDisplayName = 'Apple Pay Biometric';
+    else if (paymentMethod === 'netbanking') methodDisplayName = `NetBanking (${selectedBank})`;
+    else if (paymentMethod === 'crypto') methodDisplayName = `Crypto Web3 (${cryptoCoin})`;
+    else if (paymentMethod === 'wire') methodDisplayName = 'Swiss Escrow Wire';
 
     const bookingPayload = {
       packageId: pkg.id,
@@ -108,9 +138,9 @@ export const BoardingPassModal = () => {
       selectedAddons,
       totalPriceUSD: grandTotal,
       discountUSD: discountAmount,
-      paymentMethod: paymentMethod === 'card' ? 'Centurion Black Card' : paymentMethod === 'apple' ? 'Apple Pay Express' : 'Swiss Private Wire',
+      paymentMethod: methodDisplayName,
       paymentTransactionId: transactionId,
-      cardLast4: '8899',
+      cardLast4: cardNumber.slice(-4) || '8899',
       specialRequests: specialRequests.trim()
     };
 
@@ -135,15 +165,16 @@ export const BoardingPassModal = () => {
       guests: guestCount,
       cabin: cabinSuite,
       totalUSD: grandTotal,
-      paymentMethod: bookingPayload.paymentMethod,
+      paymentMethod: methodDisplayName,
       timestamp: new Date().toLocaleString()
     });
 
     if (showToast) {
-      showToast(`Expedition Confirmed! Reference ${bookingId} inked to passport.`, '✈️');
+      showToast(`Payment Approved! Booking [${bookingId}] confirmed.`, '🎉');
     }
 
     setIsSubmitting(false);
+    setProcessingStatus('');
     setStep(3);
   };
 
@@ -155,26 +186,46 @@ export const BoardingPassModal = () => {
 
   return (
     <div className="modal-overlay" onClick={handleClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '820px' }}>
+      <div className="modal-container" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '860px' }}>
         <button type="button" className="modal-close-btn" onClick={handleClose} aria-label="Close booking">
           ✕
         </button>
+
+        {/* ===================================================================
+            STEPPER PROGRESS HEADER
+           =================================================================== */}
+        <div style={{ background: 'var(--bg-primary)', borderBottom: '1px solid var(--border-glass)', padding: '1rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', fontSize: '0.82rem', fontFamily: 'var(--font-mono)' }}>
+            <span style={{ color: step >= 1 ? 'var(--accent-primary)' : 'var(--text-muted)', fontWeight: step === 1 ? 800 : 500, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: step >= 1 ? 'var(--accent-primary)' : 'transparent', color: step >= 1 ? '#000' : 'var(--text-muted)', border: '1px solid var(--accent-primary)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem' }}>1</span>
+              Manifest & Suite
+            </span>
+            <span style={{ color: 'var(--border-glass)' }}>—</span>
+            <span style={{ color: step >= 2 ? 'var(--accent-primary)' : 'var(--text-muted)', fontWeight: step === 2 ? 800 : 500, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: step >= 2 ? 'var(--accent-primary)' : 'transparent', color: step >= 2 ? '#000' : 'var(--text-muted)', border: '1px solid var(--accent-primary)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem' }}>2</span>
+              Payment Gateway
+            </span>
+            <span style={{ color: 'var(--border-glass)' }}>—</span>
+            <span style={{ color: step >= 3 ? '#10b981' : 'var(--text-muted)', fontWeight: step === 3 ? 800 : 500, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: step >= 3 ? '#10b981' : 'transparent', color: step >= 3 ? '#000' : 'var(--text-muted)', border: '1px solid #10b981', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem' }}>3</span>
+              Pass & Invoice
+            </span>
+          </div>
+
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <span>🔒</span> 256-Bit SSL Encrypted
+          </div>
+        </div>
 
         {/* ===================================================================
             STEP 1: EXPEDITION MANIFEST & SUITE CUSTOMIZATION
            =================================================================== */}
         {step === 1 && (
           <div style={{ padding: '2.5rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                STEP 01 OF 03 • EXPEDITION MANIFEST
-              </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                Next: Payment Checkout
-              </span>
-            </div>
-
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', margin: '0 0 1.5rem', color: 'var(--text-main)' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+              EXPEDITION MANIFEST • {pkg.category}
+            </span>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', margin: '0.35rem 0 1.5rem', color: 'var(--text-main)' }}>
               {pkg.title}
             </h3>
 
@@ -183,7 +234,7 @@ export const BoardingPassModal = () => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem', marginBottom: '1.25rem' }}>
                 <div>
                   <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>
-                    Departure Date
+                    Departure Window Date *
                   </label>
                   <input
                     type="date"
@@ -204,7 +255,7 @@ export const BoardingPassModal = () => {
                     style={{ width: '100%', padding: '0.75rem 1rem', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontSize: '0.92rem' }}
                   >
                     <option value={1}>Solo Explorer (1 Guest)</option>
-                    <option value={2}>Private Couple (2 Guests)</option>
+                    <option value={2}>Private Couple Suite (2 Guests)</option>
                     <option value={4}>Private Clan / Villa (4 Guests)</option>
                   </select>
                 </div>
@@ -235,7 +286,7 @@ export const BoardingPassModal = () => {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Lord Julian Sterling"
+                    placeholder="e.g. Sanjay Kumar"
                     required
                     style={{ width: '100%', padding: '0.75rem 1rem', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontSize: '0.92rem' }}
                   />
@@ -243,13 +294,13 @@ export const BoardingPassModal = () => {
 
                 <div>
                   <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>
-                    Private Concierge Email *
+                    Concierge Confirmation Email *
                   </label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="julian@sterling.co.uk"
+                    placeholder="sanjay@traveler.com"
                     required
                     style={{ width: '100%', padding: '0.75rem 1rem', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontSize: '0.92rem' }}
                   />
@@ -257,19 +308,19 @@ export const BoardingPassModal = () => {
 
                 <div>
                   <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>
-                    Satellite Contact / Phone
+                    Mobile Phone / WhatsApp
                   </label>
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+1 (555) 019-2831"
+                    placeholder="+91 98765 43210"
                     style={{ width: '100%', padding: '0.75rem 1rem', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontSize: '0.92rem' }}
                   />
                 </div>
               </div>
 
-              {/* VIP Curated Add-ons */}
+              {/* VIP Add-ons */}
               <div style={{ marginBottom: '1.75rem' }}>
                 <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.6rem' }}>
                   White-Glove VIP Curations (For {guestCount} {guestCount === 1 ? 'Explorer' : 'Explorers'})
@@ -317,14 +368,14 @@ export const BoardingPassModal = () => {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-glass)', paddingTop: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                    ESTIMATED EXPEDITION SUB-TOTAL
+                    SUBTOTAL ({guestCount} EXPLORERS)
                   </span>
                   <div style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--accent-primary)' }}>
                     {formatPrice(baseSubtotal + addonsTotal)}
                   </div>
                 </div>
-                <button type="submit" className="btn btn-primary" style={{ padding: '0.85rem 1.8rem' }}>
-                  Proceed to Payment Checkout →
+                <button type="submit" className="btn btn-primary" style={{ padding: '0.85rem 2rem', fontSize: '0.95rem' }}>
+                  Proceed to Payment Gateway →
                 </button>
               </div>
             </form>
@@ -332,13 +383,13 @@ export const BoardingPassModal = () => {
         )}
 
         {/* ===================================================================
-            STEP 2: LUXURY PAYMENT TERMINAL & VOUCHER SETTLEMENT
+            STEP 2: MODERN LUXURY PAYMENT GATEWAY (6 PAYMENT METHODS)
            =================================================================== */}
         {step === 2 && (
           <div style={{ padding: '2.5rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                STEP 02 OF 03 • SECURE LUXURY PAYMENT
+                STEP 02 OF 03 • PAYMENT GATEWAY CHECKOUT
               </span>
               <button
                 type="button"
@@ -349,114 +400,127 @@ export const BoardingPassModal = () => {
               </button>
             </div>
 
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.9rem', margin: '0 0 1.5rem', color: 'var(--text-main)' }}>
-              Concierge Checkout & Settlement
-            </h3>
-
-            {/* Payment Method Selector */}
-            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-              <button
-                type="button"
-                onClick={() => setPaymentMethod('card')}
-                style={{
-                  flex: '1 1 180px',
-                  padding: '0.75rem 1rem',
-                  borderRadius: 'var(--radius-sm)',
-                  background: paymentMethod === 'card' ? 'rgba(212, 175, 55, 0.15)' : 'var(--bg-card)',
-                  border: paymentMethod === 'card' ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
-                  color: 'var(--text-main)',
-                  cursor: 'pointer',
-                  fontWeight: 600,
-                  fontSize: '0.88rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.5rem'
-                }}
-              >
-                <span>💳</span> Credit / Black Card
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setPaymentMethod('apple')}
-                style={{
-                  flex: '1 1 180px',
-                  padding: '0.75rem 1rem',
-                  borderRadius: 'var(--radius-sm)',
-                  background: paymentMethod === 'apple' ? 'rgba(212, 175, 55, 0.15)' : 'var(--bg-card)',
-                  border: paymentMethod === 'apple' ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
-                  color: 'var(--text-main)',
-                  cursor: 'pointer',
-                  fontWeight: 600,
-                  fontSize: '0.88rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.5rem'
-                }}
-              >
-                <span>🍏</span> Apple / Google Pay
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setPaymentMethod('wire')}
-                style={{
-                  flex: '1 1 180px',
-                  padding: '0.75rem 1rem',
-                  borderRadius: 'var(--radius-sm)',
-                  background: paymentMethod === 'wire' ? 'rgba(212, 175, 55, 0.15)' : 'var(--bg-card)',
-                  border: paymentMethod === 'wire' ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
-                  color: 'var(--text-main)',
-                  cursor: 'pointer',
-                  fontWeight: 600,
-                  fontSize: '0.88rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.5rem'
-                }}
-              >
-                <span>🏛️</span> Swiss Escrow Wire
-              </button>
+            {/* 6 Payment Methods Pills Tabs */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.6rem', marginBottom: '1.75rem' }}>
+              {[
+                { id: 'card', icon: '💳', name: 'Card' },
+                { id: 'upi', icon: '⚡', name: 'UPI / QR' },
+                { id: 'apple', icon: '', name: 'Apple / GPay' },
+                { id: 'netbanking', icon: '🏦', name: 'NetBanking' },
+                { id: 'crypto', icon: '🪙', name: 'Crypto Web3' },
+                { id: 'wire', icon: '🏛️', name: 'Swiss Wire' }
+              ].map(m => (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => setPaymentMethod(m.id)}
+                  style={{
+                    padding: '0.65rem 0.5rem',
+                    borderRadius: 'var(--radius-sm)',
+                    background: paymentMethod === m.id ? 'var(--accent-gradient)' : 'var(--bg-primary)',
+                    color: paymentMethod === m.id ? '#08090d' : 'var(--text-main)',
+                    border: paymentMethod === m.id ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
+                    fontWeight: 700,
+                    fontSize: '0.8rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.4rem',
+                    cursor: 'pointer',
+                    boxShadow: paymentMethod === m.id ? '0 4px 15px rgba(212, 175, 55, 0.3)' : 'none',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <span>{m.icon}</span>
+                  <span>{m.name}</span>
+                </button>
+              ))}
             </div>
 
             <form onSubmit={handleAuthorizePayment}>
+              {/* 1. CREDIT/DEBIT CARDS METHOD WITH LIVE METAL CARD GRAPHIC */}
               {paymentMethod === 'card' && (
-                <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-md)', padding: '1.5rem', marginBottom: '1.5rem' }}>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' }}>
-                      Cardholder Name
-                    </label>
-                    <input
-                      type="text"
-                      value={cardHolder}
-                      onChange={(e) => setCardHolder(e.target.value)}
-                      required
-                      placeholder="LORD JULIAN STERLING"
-                      style={{ width: '100%', padding: '0.75rem 1rem', background: 'var(--bg-card)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}
-                    />
+                <div>
+                  {/* Luxury Metal Card Preview Graphic */}
+                  <div
+                    style={{
+                      background: 'linear-gradient(135deg, #1f2430 0%, #0c0e14 100%)',
+                      border: '1px solid rgba(212, 175, 55, 0.4)',
+                      borderRadius: '16px',
+                      padding: '1.5rem 1.8rem',
+                      marginBottom: '1.5rem',
+                      boxShadow: '0 15px 35px rgba(0,0,0,0.7)',
+                      position: 'relative',
+                      overflow: 'hidden'
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', letterSpacing: '0.15em' }}>
+                        WANDERLUST CENTURION BLACK
+                      </span>
+                      <span style={{ fontSize: '1.3rem' }}>📶</span>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                      <div style={{ width: '40px', height: '30px', background: 'linear-gradient(135deg, #d4af37, #f3e5ab)', borderRadius: '6px', border: '1px solid #aa7c11' }} />
+                    </div>
+
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.35rem', letterSpacing: '0.15em', color: '#fff', marginBottom: '1rem', textShadow: '0 2px 5px rgba(0,0,0,0.8)' }}>
+                      {cardNumber || '•••• •••• •••• ••••'}
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                      <div>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>CARDHOLDER</span>
+                        <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.92rem', fontWeight: 700, color: '#fff' }}>
+                          {cardHolder || 'EXPLORER NAME'}
+                        </span>
+                      </div>
+                      <div>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase' }}>EXPIRES</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.92rem', color: '#fff' }}>
+                          {cardExpiry || 'MM/YY'}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--accent-primary)', fontStyle: 'italic' }}>
+                        AMEX
+                      </div>
+                    </div>
                   </div>
 
-                  <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' }}>
-                      Card Number
-                    </label>
-                    <input
-                      type="text"
-                      value={cardNumber}
-                      onChange={(e) => setCardNumber(e.target.value)}
-                      required
-                      placeholder="4532 •••• •••• 8899"
-                      style={{ width: '100%', padding: '0.75rem 1rem', background: 'var(--bg-card)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontFamily: 'var(--font-mono)', fontSize: '1rem', letterSpacing: '0.1em' }}
-                    />
-                  </div>
+                  {/* Card Form Inputs */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' }}>
+                        Cardholder Name *
+                      </label>
+                      <input
+                        type="text"
+                        value={cardHolder}
+                        onChange={(e) => setCardHolder(e.target.value.toUpperCase())}
+                        required
+                        placeholder="SANJAY KUMAR"
+                        style={{ width: '100%', padding: '0.75rem 1rem', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}
+                      />
+                    </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' }}>
+                        16-Digit Card Number *
+                      </label>
+                      <input
+                        type="text"
+                        value={cardNumber}
+                        onChange={(e) => formatCardInput(e.target.value)}
+                        required
+                        placeholder="4532 8901 2345 8899"
+                        style={{ width: '100%', padding: '0.75rem 1rem', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontFamily: 'var(--font-mono)', fontSize: '1rem' }}
+                      />
+                    </div>
+
                     <div>
                       <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' }}>
-                        Expiry (MM/YY)
+                        Expiry (MM/YY) *
                       </label>
                       <input
                         type="text"
@@ -464,12 +528,14 @@ export const BoardingPassModal = () => {
                         onChange={(e) => setCardExpiry(e.target.value)}
                         required
                         placeholder="08/29"
-                        style={{ width: '100%', padding: '0.75rem 1rem', background: 'var(--bg-card)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}
+                        maxLength={5}
+                        style={{ width: '100%', padding: '0.75rem 1rem', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}
                       />
                     </div>
+
                     <div>
                       <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' }}>
-                        Security Code (CVV)
+                        Security Code (CVV) *
                       </label>
                       <input
                         type="password"
@@ -478,65 +544,180 @@ export const BoardingPassModal = () => {
                         required
                         maxLength={4}
                         placeholder="•••"
-                        style={{ width: '100%', padding: '0.75rem 1rem', background: 'var(--bg-card)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}
+                        style={{ width: '100%', padding: '0.75rem 1rem', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}
                       />
                     </div>
                   </div>
                 </div>
               )}
 
+              {/* 2. UPI / QR SCAN & PAY METHOD */}
+              {paymentMethod === 'upi' && (
+                <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-md)', padding: '1.8rem', textAlign: 'center', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'inline-flex', padding: '0.8rem', background: '#ffffff', borderRadius: '12px', marginBottom: '1rem', boxShadow: '0 8px 25px rgba(0,0,0,0.5)' }}>
+                    {/* Simulated High-Res UPI QR Code */}
+                    <div style={{ width: '140px', height: '140px', background: 'repeating-linear-gradient(45deg, #111 0, #111 8px, #fff 8px, #fff 16px)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ background: '#fff', padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 800, color: '#000' }}>
+                        SCAN TO PAY
+                      </span>
+                    </div>
+                  </div>
+
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--accent-primary)', marginBottom: '1.25rem' }}>
+                    Scan with Google Pay, PhonePe, Paytm, or any UPI App
+                  </p>
+
+                  <div style={{ textAlign: 'left', maxWidth: '420px', margin: '0 auto' }}>
+                    <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' }}>
+                      Or Enter UPI ID / VPA
+                    </label>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <input
+                        type="text"
+                        value={upiId}
+                        onChange={(e) => setUpiId(e.target.value)}
+                        placeholder="username@okhdfcbank"
+                        style={{ flex: 1, padding: '0.75rem 1rem', background: 'var(--bg-card)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => showToast && showToast(`UPI ID [${upiId}] Verified!`, '✓')}
+                        className="btn btn-secondary"
+                        style={{ fontSize: '0.8rem', padding: '0.6rem 1rem' }}
+                      >
+                        Verify
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 3. APPLE PAY & GOOGLE PAY METHOD */}
               {paymentMethod === 'apple' && (
-                <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-md)', padding: '2rem', textAlign: 'center', marginBottom: '1.5rem' }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}></div>
-                  <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', marginBottom: '0.25rem' }}>
-                    Apple Pay Instant Biometric Authorization
+                <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-md)', padding: '2.5rem 1.5rem', textAlign: 'center', marginBottom: '1.5rem' }}>
+                  <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}></div>
+                  <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', color: '#fff', marginBottom: '0.5rem' }}>
+                    One-Touch Biometric Authorization
                   </h4>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                    Biometric fingerprint or Face ID will be requested upon clicking Authorize Payment below.
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', maxWidth: '460px', margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
+                    Authorize your expedition reservation instantly using Apple Pay Face ID or Google Wallet Passkey.
+                  </p>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#000', border: '1px solid #444', padding: '0.85rem 2.2rem', borderRadius: 'var(--radius-full)', color: '#fff', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}>
+                    <span> Pay</span>
+                    <span style={{ color: '#aaa', fontSize: '0.85rem' }}>{formatPrice(grandTotal)}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* 4. NETBANKING METHOD */}
+              {paymentMethod === 'netbanking' && (
+                <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-md)', padding: '1.75rem', marginBottom: '1.5rem' }}>
+                  <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.75rem' }}>
+                    Select Premier Banking Institution
+                  </label>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem', marginBottom: '1rem' }}>
+                    {['HDFC Bank', 'ICICI Bank', 'State Bank of India', 'Axis Bank', 'HSBC Premier', 'Barclays Private'].map(b => (
+                      <button
+                        key={b}
+                        type="button"
+                        onClick={() => setSelectedBank(b)}
+                        style={{
+                          padding: '0.75rem 0.5rem',
+                          borderRadius: 'var(--radius-sm)',
+                          background: selectedBank === b ? 'rgba(212, 175, 55, 0.15)' : 'var(--bg-card)',
+                          border: selectedBank === b ? '1px solid var(--accent-primary)' : '1px solid var(--border-glass)',
+                          color: selectedBank === b ? 'var(--accent-primary)' : 'var(--text-main)',
+                          fontSize: '0.82rem',
+                          fontWeight: 600,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {b}
+                      </button>
+                    ))}
+                  </div>
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
+                    You will be securely redirected to {selectedBank}'s encrypted portal for 2-factor OTP verification.
                   </p>
                 </div>
               )}
 
+              {/* 5. CRYPTOCURRENCY WEB3 METHOD */}
+              {paymentMethod === 'crypto' && (
+                <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-md)', padding: '1.75rem', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <label style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', textTransform: 'uppercase' }}>
+                      Select Settlement Token
+                    </label>
+                    <select
+                      value={cryptoCoin}
+                      onChange={(e) => setCryptoCoin(e.target.value)}
+                      style={{ padding: '0.4rem 0.8rem', background: 'var(--bg-card)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: '#fff', fontSize: '0.85rem' }}
+                    >
+                      <option value="USDT (TRC20)">USDT (Tether TRC20)</option>
+                      <option value="USDT (ERC20)">USDT (Tether ERC20)</option>
+                      <option value="Bitcoin (BTC)">Bitcoin (BTC Native)</option>
+                      <option value="Ethereum (ETH)">Ethereum (ETH)</option>
+                    </select>
+                  </div>
+
+                  <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glass)', padding: '1rem', borderRadius: 'var(--radius-sm)', marginBottom: '1rem' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--text-muted)', display: 'block' }}>RESERVED DEPOSIT WALLET</span>
+                    <strong style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#10b981', wordBreak: 'break-all' }}>
+                      0x71C8A9b79427b372f8546132D9eD7F16F4F19b02
+                    </strong>
+                  </div>
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
+                    ⚡ 0% Merchant Fees. Escrow smart contract locks suite upon 1 network confirmation.
+                  </p>
+                </div>
+              )}
+
+              {/* 6. SWISS WIRE METHOD */}
               {paymentMethod === 'wire' && (
-                <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-md)', padding: '1.5rem', marginBottom: '1.5rem' }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', marginBottom: '0.5rem' }}>
+                <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-md)', padding: '1.75rem', marginBottom: '1.5rem' }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', marginBottom: '0.6rem' }}>
                     🏛️ BANQUE CANTONALE DE GENÈVE (SWISS ESCROW)
                   </div>
-                  <p style={{ color: 'var(--text-light)', fontSize: '0.85rem', lineHeight: 1.6, margin: 0 }}>
-                    IBAN: <strong>CH93 0079 0123 4567 8901 2</strong> • BIC/SWIFT: <strong>BCGECHGGXXX</strong><br />
-                    Reference will be generated instantly to hold your suite with 48 hours settlement window.
+                  <div style={{ background: 'var(--bg-card)', padding: '1rem', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-mono)', fontSize: '0.82rem', lineHeight: 1.7, color: 'var(--text-main)', border: '1px solid var(--border-glass)' }}>
+                    IBAN: <strong>CH93 0079 0123 4567 8901 2</strong><br />
+                    BIC/SWIFT: <strong>BCGECHGGXXX</strong><br />
+                    Beneficiary: <strong>Wanderlust Haute Escapes SA</strong>
+                  </div>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.75rem', margin: 0 }}>
+                    Reference code will be assigned to hold your chosen suite for 48 hours awaiting settlement.
                   </p>
                 </div>
               )}
 
-              {/* Voucher Code Box */}
+              {/* Promo Voucher Code Box */}
               <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
                 <input
                   type="text"
-                  placeholder="VIP Promo Voucher (e.g. WANDER150)..."
+                  placeholder="Promo Voucher (e.g. WANDER150)..."
                   value={voucherCode}
                   onChange={(e) => setVoucherCode(e.target.value)}
-                  style={{ flex: 1, padding: '0.7rem 1rem', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontSize: '0.88rem', textTransform: 'uppercase' }}
+                  style={{ flex: 1, padding: '0.75rem 1rem', background: 'var(--bg-primary)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', color: 'var(--text-main)', fontSize: '0.9rem', textTransform: 'uppercase' }}
                 />
                 <button
                   type="button"
                   onClick={applyVoucher}
                   className="btn btn-secondary"
-                  style={{ padding: '0.7rem 1.25rem', fontSize: '0.85rem' }}
+                  style={{ padding: '0.75rem 1.4rem', fontSize: '0.85rem' }}
                 >
-                  Apply Code
+                  Apply Voucher
                 </button>
               </div>
 
-              {/* Itemized Financial Ledger */}
+              {/* Financial Ledger Breakdown */}
               <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glass)', borderRadius: 'var(--radius-sm)', padding: '1.25rem', marginBottom: '1.75rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
-                  <span>Base Charter ({guestCount} Explorers)</span>
+                  <span>Base Package ({guestCount} Explorers)</span>
                   <span>{formatPrice(baseSubtotal)}</span>
                 </div>
                 {addonsTotal > 0 && (
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
-                    <span>White-Glove VIP Curations</span>
+                    <span>Selected White-Glove VIP Curations</span>
                     <span>+{formatPrice(addonsTotal)}</span>
                   </div>
                 )}
@@ -550,20 +731,25 @@ export const BoardingPassModal = () => {
                     <span>-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', borderTop: '1px solid var(--border-glass)', paddingTop: '0.75rem', marginTop: '0.5rem' }}>
-                  <span>Total Settled USD</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-main)', borderTop: '1px solid var(--border-glass)', paddingTop: '0.75rem', marginTop: '0.5rem' }}>
+                  <span>Grand Total Settled</span>
                   <span style={{ color: 'var(--accent-primary)' }}>{formatPrice(grandTotal)}</span>
                 </div>
               </div>
 
-              {/* Security Trust Badges */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.5rem', marginBottom: '1.5rem', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                <span>🔒 256-Bit SSL Encrypted</span>
-                <span>🛡️ Lloyd's London Insured</span>
-                <span>✓ 100% Flexible Cancel</span>
-              </div>
+              {/* Processing Spinner Overlay */}
+              {isSubmitting && (
+                <div style={{ background: 'rgba(0,0,0,0.85)', padding: '1.5rem', borderRadius: 'var(--radius-md)', textAlign: 'center', marginBottom: '1.5rem', border: '1px solid var(--accent-primary)' }}>
+                  <div style={{ width: '36px', height: '36px', border: '3px solid rgba(212, 175, 55, 0.2)', borderTopColor: 'var(--accent-primary)', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 1rem' }} />
+                  <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+                  <strong style={{ color: 'var(--accent-primary)', fontSize: '1rem', display: 'block', marginBottom: '0.25rem' }}>
+                    {processingStatus || 'Securing Authorization...'}
+                  </strong>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Please do not refresh the page</span>
+                </div>
+              )}
 
-              {/* Settle Action */}
+              {/* Action Buttons */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-glass)', paddingTop: '1.25rem' }}>
                 <button
                   type="button"
@@ -577,9 +763,9 @@ export const BoardingPassModal = () => {
                   type="submit"
                   className="btn btn-primary"
                   disabled={isSubmitting}
-                  style={{ padding: '0.85rem 2rem', fontSize: '0.95rem' }}
+                  style={{ padding: '0.9rem 2.2rem', fontSize: '0.95rem' }}
                 >
-                  {isSubmitting ? 'Verifying Settle...' : `Authorize & Settle ${formatPrice(grandTotal)} 🔒`}
+                  {isSubmitting ? 'Processing...' : `Pay & Settle ${formatPrice(grandTotal)} 🔒`}
                 </button>
               </div>
             </form>
@@ -597,25 +783,27 @@ export const BoardingPassModal = () => {
                 background: 'rgba(16, 185, 129, 0.15)',
                 border: '1px solid #10b981',
                 borderRadius: 'var(--radius-sm)',
-                padding: '0.85rem 1.25rem',
+                padding: '1rem 1.25rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginBottom: '1.5rem'
+                marginBottom: '1.5rem',
+                flexWrap: 'wrap',
+                gap: '0.5rem'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ fontSize: '1.5rem' }}>✓</span>
+                <span style={{ fontSize: '1.6rem' }}>✓</span>
                 <div>
-                  <strong style={{ color: '#10b981', fontSize: '0.95rem', display: 'block' }}>
-                    Expedition Manifest Confirmed & Paid in Full
+                  <strong style={{ color: '#10b981', fontSize: '1rem', display: 'block' }}>
+                    Expedition Confirmed & Settled in Full
                   </strong>
                   <span style={{ fontSize: '0.78rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
-                    Transaction Ref: {confirmedBooking.transactionId} • Settled via {confirmedBooking.paymentMethod}
+                    Ref: {confirmedBooking.transactionId} • Method: {confirmedBooking.paymentMethod}
                   </span>
                 </div>
               </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--accent-primary)', fontWeight: 700 }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--accent-primary)', fontWeight: 800 }}>
                 {confirmedBooking.id}
               </span>
             </div>
@@ -672,7 +860,7 @@ export const BoardingPassModal = () => {
                     </span>
                   </div>
                   <div className="pass-meta-cell">
-                    <span className="pm-label">Explorers & Cabin</span>
+                    <span className="pm-label">Party & Cabin</span>
                     <span className="pm-val">{confirmedBooking.guests} Guests • Suite 01A</span>
                   </div>
                 </div>
